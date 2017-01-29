@@ -10,7 +10,7 @@ defmodule DiningPhilosophers.Philosopher do
       right_spoon: right_spoon,
       health: 10
     }
-    GenServer.start_link(__MODULE__, initial_state)
+    GenServer.start_link(__MODULE__, initial_state, name: :"#{name}")
   end
 
   def init(initial_state) do
