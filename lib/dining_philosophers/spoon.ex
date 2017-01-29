@@ -8,11 +8,17 @@ defmodule DiningPhilosophers.Spoon do
   end
 
   def pick_up(id, philosopher) do
-    GenServer.call id, {:pick_up, philosopher}
+    if GenServer.whereis(id) do
+      GenServer.call id, {:pick_up, philosopher}
+    else
+      :error
+    end
   end
 
   def drop(id, philosopher) do
-    GenServer.cast id, {:drop, philosopher}
+    if GenServer.whereis(id) do
+      GenServer.cast id, {:drop, philosopher}
+    end
   end
 
   def init(:ok) do
