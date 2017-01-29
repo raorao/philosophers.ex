@@ -8,7 +8,7 @@ defmodule DiningPhilosophers.Philosopher do
       name: name,
       left_spoon: left_spoon,
       right_spoon: right_spoon,
-      health: 10
+      health: 20
     }
     GenServer.start_link(__MODULE__, initial_state, name: :"#{name}")
   end
@@ -26,11 +26,11 @@ defmodule DiningPhilosophers.Philosopher do
       right_spoon: right_spoon
     }
   ) do
-    Logger.info("#{name} has eaten. Her health is now 10.")
+    Logger.info("#{name} has eaten. Her health is now 20.")
     Spoon.drop(left_spoon, name)
     Spoon.drop(right_spoon, name)
 
-    {:noreply, %{state | health: 10}}
+    {:noreply, %{state | health: 20}}
   end
 
 
@@ -77,7 +77,7 @@ defmodule DiningPhilosophers.Philosopher do
   end
 
   defp schedule_check do
-    interval = 1500 + :rand.uniform(1500)
+    interval = 1500 + :rand.uniform(1000)
     Process.send_after self(), :check, interval
   end
 end
