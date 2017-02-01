@@ -8,7 +8,7 @@ defmodule DiningPhilosophers.Philosopher do
       name: name,
       left_utensil: left_utensil,
       right_utensil: right_utensil,
-      health: 10
+      health: 30
     }
     GenServer.start_link(__MODULE__, initial_state, name: :"#{name}")
   end
@@ -79,7 +79,7 @@ defmodule DiningPhilosophers.Philosopher do
   end
 
   defp schedule_check do
-    interval = 1500 + :rand.uniform(1000)
+    interval = 1500 + :rand.uniform(1500)
     Process.send_after self(), :check, interval
   end
 end
