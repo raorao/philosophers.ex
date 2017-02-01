@@ -1,13 +1,13 @@
 defmodule DiningPhilosophers.Philosopher do
   use GenServer
   require Logger
-  alias DiningPhilosophers.Spoon
+  alias DiningPhilosophers.Utensil
 
-  def start_link(name, left_spoon, right_spoon) do
+  def start_link(name, left_utensil, right_utensil) do
     initial_state = %{
       name: name,
-      left_spoon: left_spoon,
-      right_spoon: right_spoon,
+      left_utensil: left_utensil,
+      right_utensil: right_utensil,
       health: 20
     }
     GenServer.start_link(__MODULE__, initial_state, name: :"#{name}")
@@ -22,13 +22,13 @@ defmodule DiningPhilosophers.Philosopher do
     :eat,
     state = %{
       name: name,
-      left_spoon: left_spoon,
-      right_spoon: right_spoon
+      left_utensil: left_utensil,
+      right_utensil: right_utensil
     }
   ) do
-    Logger.info("#{name} has eaten. Her health is now 20.")
-    Spoon.drop(left_spoon, name)
-    Spoon.drop(right_spoon, name)
+    Logger.info("#{name} has eaten. Her health is now 20. Dropping utensils.")
+    Utensil.drop(left_utensil, name)
+    Utensil.drop(right_utensil, name)
 
     {:noreply, %{state | health: 20}}
   end
@@ -43,26 +43,26 @@ defmodule DiningPhilosophers.Philosopher do
     :check,
     state = %{
       name: name,
-      left_spoon: left_spoon,
-      right_spoon: right_spoon,
+      left_utensil: left_utensil,
+      right_utensil: right_utensil,
       health: health
     }
   ) do
-    case Spoon.pick_up(left_spoon, name) do
+    case Utensil.pick_up(left_utensil, name) do
 
       :ok ->
-        case Spoon.pick_up(right_spoon, name) do
+        case Utensil.pick_up(right_utensil, name) do
           :ok ->
             Logger.debug("#{name} is ready to eat!")
             eat()
 
           :error ->
-            Logger.debug("#{name} failed to pick up spoon #{right_spoon}. dropping #{left_spoon}.")
-            Spoon.drop(left_spoon, name)
+            Logger.debug("#{name} failed to pick up the #{right_utensil}. dropping the #{left_utensil}.")
+            Utensil.drop(left_utensil, name)
         end
 
       :error ->
-        Logger.debug("#{name} failed to pick up spoon #{left_spoon}.")
+        Logger.debug("#{name} failed to pick up the #{left_utensil}.")
     end
 
     schedule_check()

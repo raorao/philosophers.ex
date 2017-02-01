@@ -1,4 +1,4 @@
-defmodule DiningPhilosophers.Spoon do
+defmodule DiningPhilosophers.Utensil do
   use GenServer
   require Logger
 
