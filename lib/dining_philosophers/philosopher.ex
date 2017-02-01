@@ -8,7 +8,7 @@ defmodule DiningPhilosophers.Philosopher do
       name: name,
       left_utensil: left_utensil,
       right_utensil: right_utensil,
-      health: 20
+      health: 10
     }
     GenServer.start_link(__MODULE__, initial_state, name: :"#{name}")
   end
@@ -23,14 +23,16 @@ defmodule DiningPhilosophers.Philosopher do
     state = %{
       name: name,
       left_utensil: left_utensil,
-      right_utensil: right_utensil
+      right_utensil: right_utensil,
+      health: health
     }
   ) do
-    Logger.info("#{name} has eaten. Her health is now 20. Dropping utensils.")
+    new_health = health + 3
+    Logger.info("#{name} has eaten. Her health is now #{new_health}. Dropping utensils.")
     Utensil.drop(left_utensil, name)
     Utensil.drop(right_utensil, name)
 
-    {:noreply, %{state | health: 20}}
+    {:noreply, %{state | health: new_health}}
   end
 
 
